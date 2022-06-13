@@ -17,7 +17,10 @@ class LoginPage extends StatelessWidget {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  const Logo(titulo: 'Messenger'),
+                  const Logo(
+                    logo: 'assets/logo-chat.png',
+                    titulo: 'Messenger',
+                  ),
                   _Form(),
                   const Labels(
                     ruta: 'register',
