@@ -1,5 +1,6 @@
 import 'package:chat_app/helpers/mostrar_alerta.dart';
 import 'package:chat_app/services/auth_service.dart';
+import 'package:chat_app/services/socket_service.dart';
 import 'package:chat_app/widgets/boton_azul.dart';
 import 'package:chat_app/widgets/custom_input.dart';
 import 'package:chat_app/widgets/custom_labels.dart';
@@ -25,15 +26,15 @@ class LoginPage extends StatelessWidget {
                     titulo: 'Messenger',
                   ),
                   _Form(),
-                  const Labels(
+                  Labels(
                     ruta: 'register',
                     titulo: '¿No tienes cuenta?',
                     subTitulo: 'Crea una ahora!',
                   ),
-                  const Text(
+                  Text(
                     'Términos y condiciones de uso',
                     style: TextStyle(fontWeight: FontWeight.w200),
-                  ),
+                  )
                 ],
               ),
             ),
@@ -44,54 +45,55 @@ class LoginPage extends StatelessWidget {
 
 class _Form extends StatefulWidget {
   @override
-  State<_Form> createState() => __FormState();
+  __FormState createState() => __FormState();
 }
 
 class __FormState extends State<_Form> {
   final emailCtrl = TextEditingController();
   final passCtrl = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
     final authService = Provider.of<AuthService>(context);
+    final socketService = Provider.of<SocketService>(context);
+
     return Container(
       margin: EdgeInsets.only(top: 40),
       padding: EdgeInsets.symmetric(horizontal: 50),
       child: Column(
-        children: [
+        children: <Widget>[
           CustomInput(
-            icon: Icons.email_outlined,
-            placeholder: 'Email',
+            icon: Icons.mail_outline,
+            placeholder: 'Correo',
             keyboardType: TextInputType.emailAddress,
             textController: emailCtrl,
-            isPassword: false,
           ),
           CustomInput(
-            icon: Icons.lock_outline_rounded,
+            icon: Icons.lock_outline,
             placeholder: 'Contraseña',
-            keyboardType: TextInputType.visiblePassword,
             textController: passCtrl,
             isPassword: true,
           ),
           BotonAzul(
-            text: 'Ingresar',
+            text: 'Ingrese',
             onPressed: authService.autenticando
-                ? null
+                ? () {}
                 : () async {
                     FocusScope.of(context).unfocus();
+
                     final loginOk = await authService.login(
                         emailCtrl.text.trim(), passCtrl.text.trim());
 
                     if (loginOk) {
-                      // TODO conectar a nuestro socket server
-                      // Navegar a otra pantalla
+                      socketService.connect();
                       Navigator.pushReplacementNamed(context, 'usuarios');
                     } else {
-                      // Mostrar alerta
-                      mostararAlerta(context, 'Login incorrecto',
+                      // Mostara alerta
+                      mostrarAlerta(context, 'Login incorrecto',
                           'Revise sus credenciales nuevamente');
                     }
                   },
-          ),
+          )
         ],
       ),
     );

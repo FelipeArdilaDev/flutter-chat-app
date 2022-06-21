@@ -13,7 +13,7 @@ class CustomInput extends StatelessWidget {
     required this.icon,
     required this.textController,
     this.keyboardType = TextInputType.text,
-    required this.isPassword,
+    this.isPassword = false,
   }) : super(key: key);
 
   @override

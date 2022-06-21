@@ -3,8 +3,8 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 
-mostararAlerta(BuildContext context, String titulo, String subTitulo) {
-  if (!Platform.isAndroid) {
+mostrarAlerta(BuildContext context, String titulo, String subTitulo) {
+  if (Platform.isAndroid) {
     return showDialog(
         context: context,
         builder: (_) => AlertDialog(
